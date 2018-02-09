@@ -29,7 +29,7 @@
     var myObstacles = [];
     var myScore;
 
-    // Start game with initiating score, area, player
+    // Start game with initiating score, area, players
     function startGame() {
         myGamePiece = new component(30, 30, "orange", 10, 150);
         yourGamePiece = new component(30, 30, "yellow", 10, 40);
@@ -38,6 +38,7 @@
         myGameArea.start();
     }
 
+    // Game area canvas initiated
     var myGameArea = {
     canvas : document.createElement("canvas"),
     start : function() {
@@ -63,7 +64,8 @@
            clearInterval(this.interval);
            }
     }
-
+    
+    // Create component following the given parameters
     function component(width, height, color, x, y, type) {
         this.type = type;
         this.width = width;
@@ -104,6 +106,7 @@
         }
     }
 
+    // Check for crash with obstacle, 
     function updateGameArea() {
         var x, height, gap, minHeight, maxHeight, minGap, maxGap;
         for (i = 0; i < myObstacles.length; i += 1) {
@@ -113,15 +116,17 @@
                 && ourGamePiece.crashWith(myObstacles[i])
                 || yourGamePiece.crashWith(myObstacles[i])
                 && ourGamePiece.crashWith(myObstacles[i]) 
-               ) 
-            {
-                myGameArea.stop();
-                return;
+               ){
+            myGameArea.stop();
+            return;
             }
         }
+        
+        // Clear the entire canvas
         myGameArea.clear();
         myGameArea.frameNo += 1;
         
+        // Controls player 1
         myGamePiece.speedX = 0;
         myGamePiece.speedY = 0;  
         if (myGameArea.keys && myGameArea.keys[37]) {myGamePiece.speedX = -1; }
@@ -131,6 +136,7 @@
         myGamePiece.newPos();    
         myGamePiece.update();
         
+        // Controls player 2
         yourGamePiece.speedX = 0;
         yourGamePiece.speedY = 0;  
         if (myGameArea.keys && myGameArea.keys[65]) {yourGamePiece.speedX = -1; }
@@ -140,6 +146,7 @@
         yourGamePiece.newPos();    
         yourGamePiece.update();
         
+        // Controls player 3
         ourGamePiece.speedX = 0;
         ourGamePiece.speedY = 0;  
         if (myGameArea.keys && myGameArea.keys[72]) {ourGamePiece.speedX = -1; }
@@ -165,6 +172,8 @@
             myObstacles[i].newPos();
             myObstacles[i].update();
         }
+        
+        // Update score and positions all players
         myScore.text="SCORE: " + myGameArea.frameNo;
         myScore.update();
         myGamePiece.newPos();    
